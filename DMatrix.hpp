@@ -13,7 +13,7 @@ public:
     const int rows;
     const int cols;
     using type = Element;
-public:
+
     DMatrix(int rows, int cols = 1) : rows(rows), cols(cols) {
         data = new Element[rows * cols];
     }
@@ -168,10 +168,23 @@ DMatrix<L> operator/(const DMatrix<L>& lhs, const R& rhs) {
     return result;
 };
 
+template<class L, class R>
+DMatrix<R> operator*(const L& lhs, const DMatrix<R>& rhs) {
+    DMatrix<R> result = rhs;
+    result *= lhs;
+    return result;
+};
+
+template<class L, class R>
+DMatrix<R> operator/(const L& lhs, const DMatrix<R>& rhs) {
+    DMatrix<R> result = rhs;
+    result /= lhs;
+    return result;
+};
+
 template<class Element>
 class LUDecomposition<DMatrix<Element>> {
 private:
-public:
     int* idx;
     DMatrix<Element> mat;
     Element parity;
@@ -259,11 +272,11 @@ public:
         delete idx;
     }
 
-    DMatrix<Element> solve(DMatrix<Element>& b);
+    DMatrix<Element> solve(DMatrix<Element>& b) const ;
 };
 
 template<class Element>
-DMatrix<Element> LUDecomposition<DMatrix<Element>>::solve(DMatrix<Element>& b) {
+DMatrix<Element> LUDecomposition<DMatrix<Element>>::solve(DMatrix<Element>& b) const {
     DMatrix<Element> x(dim, b.cols);
     for(int c = 0; c < b.cols; ++c) {
         DMatrix<Element> tmp(dim);

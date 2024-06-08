@@ -16,7 +16,7 @@ int main() {
 
     Mi::DMatrix<double> C = A * B;
 
-    std::cout << C << std::endl;
+    std::cout << C * 2.0 << std::endl;
 
     return 0;
 }
